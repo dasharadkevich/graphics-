@@ -255,15 +255,18 @@ class ImageEditorApp:
         df = ttk.Frame(tab)
         df.pack(fill=tk.X, pady=5)
         ttk.Label(df, text="Напрямок:", width=12).pack(side=tk.LEFT)
-        ttk.Radiobutton(df, text="Горизонтально →",
+        ttk.Radiobutton(df, text="Горизонтально",
                         variable=self.merge_dir,
                         value="horizontal").pack(side=tk.LEFT, padx=3)
-        ttk.Radiobutton(df, text="Вертикально ↓",
+        ttk.Radiobutton(df, text="Вертикально",
                         variable=self.merge_dir,
                         value="vertical").pack(side=tk.LEFT, padx=3)
 
         ttk.Button(tab, text="Об'єднати",
                    command=self.do_merge).pack(fill=tk.X, pady=10)
+
+        
+        
 
  
     def _build_tab_watermark(self):
@@ -276,7 +279,7 @@ class ImageEditorApp:
         tf = ttk.Frame(tab)
         tf.pack(fill=tk.X, pady=3)
         ttk.Label(tf, text="Текст:", width=12).pack(side=tk.LEFT)
-        self.wm_text = tk.StringVar(value="© Лабораторна робота")
+        self.wm_text = tk.StringVar(value="Лабораторна робота")
         ttk.Entry(tf, textvariable=self.wm_text).pack(side=tk.LEFT, fill=tk.X, expand=True)
 
 
@@ -302,7 +305,7 @@ class ImageEditorApp:
         self.wm_size.trace_add("write",
             lambda *a: wm_size_lbl.config(text=str(self.wm_size.get())))
 
-        # Прозорість
+
         of = ttk.Frame(tab)
         of.pack(fill=tk.X, pady=3)
         ttk.Label(of, text="Прозорість:", width=12).pack(side=tk.LEFT)
@@ -314,7 +317,7 @@ class ImageEditorApp:
         self.wm_opacity.trace_add("write",
             lambda *a: wm_op_lbl.config(text=str(self.wm_opacity.get())))
 
-        # Колір
+
         cf = ttk.Frame(tab)
         cf.pack(fill=tk.X, pady=3)
         ttk.Label(cf, text="Колір:", width=12).pack(side=tk.LEFT)
@@ -327,8 +330,7 @@ class ImageEditorApp:
         ttk.Button(tab, text="Додати водяний знак",
                 command=self.do_watermark).pack(fill=tk.X, pady=10)
 
-        ttk.Button(tab, text="Додати та зберегти як...",
-                command=self.do_watermark_save).pack(fill=tk.X, pady=(0, 5))
+
 
     def _build_tab_slideshow(self):
             tab = ttk.Frame(self.notebook, padding=10)
@@ -522,29 +524,7 @@ class ImageEditorApp:
         self.current_image = self._render_watermark(self.current_image)
         self.update_preview()
 
-    def do_watermark_save(self):
-        if self.current_image is None:
-            messagebox.showwarning("Увага", "Спочатку відкрийте зображення")
-            return
-        result = self._render_watermark(self.current_image)
-        path = filedialog.asksaveasfilename(
-            title="Зберегти з водяним знаком",
-            defaultextension=".png",
-            initialfile="watermarked.png",
-            filetypes=[("PNG", "*.png"), ("JPEG", "*.jpg"), ("BMP", "*.bmp")]
-        )
-        if not path:
-            return
-        try:
-            ext = os.path.splitext(path)[1].lower()
-            if ext in (".jpg", ".jpeg") and result.mode == "RGBA":
-                result = result.convert("RGB")
-            result.save(path)
-            messagebox.showinfo("Готово", f"Збережено:\n{path}")
-        except Exception as e:
-            messagebox.showerror("Помилка", f"Не вдалося зберегти:\n{e}")
 
- 
     def ss_add_files(self):
         paths = filedialog.askopenfilenames(
             title="Виберіть зображення для слайд-шоу",
@@ -588,7 +568,6 @@ class ImageEditorApp:
             self.reset_crop()
             self.update_preview()
 
-            # Підсвітити у списку
             self.ss_listbox.selection_clear(0, tk.END)
             self.ss_listbox.selection_set(self.ss_index)
             self.ss_listbox.see(self.ss_index)
