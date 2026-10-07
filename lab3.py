@@ -265,9 +265,7 @@ class ImageEditorApp:
         ttk.Button(tab, text="Об'єднати",
                    command=self.do_merge).pack(fill=tk.X, pady=10)
 
-        
-        
-
+    
  
     def _build_tab_watermark(self):
         tab = ttk.Frame(self.notebook, padding=10)
@@ -279,7 +277,7 @@ class ImageEditorApp:
         tf = ttk.Frame(tab)
         tf.pack(fill=tk.X, pady=3)
         ttk.Label(tf, text="Текст:", width=12).pack(side=tk.LEFT)
-        self.wm_text = tk.StringVar(value="Лабораторна робота")
+        self.wm_text = tk.StringVar(value="Лабораторна робота 3")
         ttk.Entry(tf, textvariable=self.wm_text).pack(side=tk.LEFT, fill=tk.X, expand=True)
 
 
@@ -565,7 +563,7 @@ class ImageEditorApp:
             img = load_image(path)
             self.current_image = img
             self.current_path = path
-            self.reset_crop()
+
             self.update_preview()
 
             self.ss_listbox.selection_clear(0, tk.END)
@@ -788,7 +786,7 @@ class ImageEditorApp:
         img.thumbnail((max_w, max_h), Image.LANCZOS)
         self.preview_photo = ImageTk.PhotoImage(img)
         self.preview_label.config(image=self.preview_photo, text="")
-        # Запам'ятовуємо масштаб та зсув для перетворення координат
+
         orig_w, orig_h = self.current_image.size
         prev_w, prev_h = img.size
         self.scale_factor = orig_w / prev_w if prev_w else 1.0
